@@ -6,16 +6,18 @@ import Register from "./components/register/Register";
 import {AuthProvider} from "./contexts/AuthContext";
 import {InitializeFirebase} from "./firebase-configurations/FirebaseConfig";
 import Search from "./components/search/Search";
-
+import Header from "./components/header/Header";
 
 
 function App() {
-
 
     return (
 
         <AuthProvider>
             <div className="App">
+
+                <Header/>
+
                 <main>
                     <Routes>
                         <Route path="/home" element={<Home/>}/>
