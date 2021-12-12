@@ -1,19 +1,33 @@
-import React, {useEffect, useState} from "react";
-import {onAuthStateChanged} from "firebase/auth";
+import React, {useContext, useEffect, useState} from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 
 export const AuthContext = React.createContext()
 
-//TODO implement AuthContext
-//TODO refactor the AuthProvider
-export const AuthProvider = ({children}) => {
-    const [currentUser, setCurrentUser] = useState(null)
+const initialAuthState = {
+    uid: '',
+    email: '',
+    accessToken: ''
+}
 
-    useEffect(() => {
-        onAuthStateChanged()
-    }, [])
+export const AuthProvider = ({children}) => {
+    const [user, setUser] = useLocalStorage('user', initialAuthState)
+
+    const login = (authData) => {
+        setUser(authData)
+    }
+
+    const logout = () => {
+        setUser(initialAuthState)
+    }
 
     return (
-        <AuthContext.Provider value={{currentUser}}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>
     )
+}
+
+export const useAuth = () => {
+    const authState = useContext(AuthContext)
+
+    return authState
 }
